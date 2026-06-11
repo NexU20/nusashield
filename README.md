@@ -1,7 +1,7 @@
-# SHARK-Fin
+# NusaShield FI
 
 <p align="center">
-  <strong>Platform intelijen ancaman siber keuangan berbasis OSINT untuk ekosistem keuangan digital Indonesia</strong>
+  <strong>Financial exposure monitoring berbasis OSINT untuk ekosistem keuangan digital Indonesia</strong>
 </p>
 
 ---
@@ -20,7 +20,7 @@ Saat ini, tidak ada platform terpusat yang secara proaktif memonitor sumber-sumb
 
 ## Solusi
 
-SHARK-Fin adalah platform intelijen ancaman siber yang secara otomatis:
+NusaShield FI adalah platform monitoring eksposur data finansial yang secara otomatis:
 1. **Mengumpulkan** data dari 4 sumber publik (Telegram, Pastebin, GitHub Code Search, Google Custom Search)
 2. **Mengklasifikasi** konten menggunakan regex pattern khusus Indonesia (kartu kredit dengan validasi Luhn + BIN 30+ bank, NIK dengan validasi tanggal + provinsi, NPWP dengan checksum)
 3. **Menilai risiko** dengan scoring engine multi-faktor (0-100) berdasarkan volume, freshness, kredibilitas sumber, dan tipe data
@@ -107,6 +107,43 @@ Akses:
 - **Dashboard**: http://localhost:5173/dashboard
 - **API Docs (Swagger)**: http://localhost:8001/docs
 - **Health Check**: http://localhost:8001/health
+
+## Deploy ke Vercel
+
+Project ini sudah punya konfigurasi `vercel.json` untuk deploy frontend static/demo.
+
+### Demo frontend saja
+
+Deploy ini tidak membutuhkan backend, database, atau API key eksternal. Dashboard memakai data demo dari frontend.
+
+1. Push repository ke GitHub/GitLab/Bitbucket.
+2. Buka Vercel Dashboard → **Add New** → **Project**.
+3. Import repository ini.
+4. Pastikan konfigurasi berikut terbaca:
+
+| Setting | Value |
+|---------|-------|
+| Framework Preset | `Vite` |
+| Build Command | `cd frontend && npm install && VITE_DEMO_MODE=true npm run build` |
+| Output Directory | `frontend/dist` |
+
+5. Klik **Deploy**.
+
+### Frontend Vercel + backend real
+
+Kalau ingin dashboard memakai API FastAPI asli, deploy backend secara terpisah ke Railway, Render, Fly.io, atau VPS. Setelah itu set environment variable di Vercel:
+
+```env
+VITE_DEMO_MODE=false
+VITE_API_URL=https://domain-backend-kamu.com/api/v1
+VITE_API_KEY=isi-api-key-kamu
+```
+
+Backend juga perlu mengizinkan domain Vercel pada `.env` backend:
+
+```env
+CORS_ORIGINS=["https://domain-vercel-kamu.vercel.app"]
+```
 
 ## Authentication
 
@@ -215,7 +252,7 @@ Collector yang tidak dikonfigurasi (token/key kosong) akan di-skip dengan warnin
 
 ## Catatan Legal & Etika
 
-SHARK-Fin **hanya** memonitor sumber-sumber yang dapat diakses secara publik (publicly accessible sources). Platform ini:
+NusaShield FI **hanya** memonitor sumber-sumber yang dapat diakses secara publik (publicly accessible sources). Platform ini:
 
 - **Tidak** melakukan akses tidak sah ke sistem manapun
 - **Tidak** menyimpan konten asli — semua nilai sensitif disamarkan (`mask_sensitive()`) sebelum penyimpanan ke database
@@ -227,4 +264,4 @@ SHARK-Fin **hanya** memonitor sumber-sumber yang dapat diakses secara publik (pu
 
 ---
 
-*SHARK-Fin — Melindungi ekosistem keuangan digital Indonesia melalui intelijen ancaman siber proaktif.*
+*NusaShield FI — Monitoring eksposur data finansial untuk respons keamanan yang lebih cepat.*
