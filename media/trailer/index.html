@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+  body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#05101c;font-family:"Inter",system-ui,sans-serif;}
+  .scene{position:absolute;top:0;left:0;width:1920px;height:1080px;overflow:hidden;background:#05101c;}
+  #s1{z-index:1;} #s2{z-index:2;opacity:0;} #s3{z-index:3;opacity:0;} #s4{z-index:4;opacity:0;}
+  #s5{z-index:5;opacity:0;} #s6{z-index:6;opacity:0;} #s7{z-index:7;opacity:0;} #s8{z-index:8;opacity:0;}
+  #s9{z-index:9;opacity:0;} #s10{z-index:10;opacity:0;}
+  .imgwrap{position:absolute;inset:0;overflow:hidden;}
+  .bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .vignette{position:absolute;inset:0;background:radial-gradient(120% 120% at 50% 45%, rgba(5,16,28,0) 32%, rgba(5,16,28,0.9) 100%);}
+  .scrim{position:absolute;inset:0;}
+  .dark-scrim{background:linear-gradient(180deg, rgba(5,16,28,.4), rgba(5,16,28,.82));}
+  .red-scrim{background:linear-gradient(180deg, rgba(240,82,82,.06), rgba(240,82,82,.2));}
+  .content{position:absolute;inset:0;padding:96px 120px;box-sizing:border-box;display:flex;flex-direction:column;}
+  .kicker{font-size:24px;letter-spacing:.3em;text-transform:uppercase;color:#3aa6e6;font-weight:700;}
+  .kicker.red{color:#f05252;}
+  .h1{font-size:120px;font-weight:900;line-height:.98;letter-spacing:-.02em;color:#fff;}
+  .h2{font-size:90px;font-weight:900;line-height:1.0;letter-spacing:-.02em;color:#fff;}
+  .accent{color:#3aa6e6;} .red{color:#f05252;}
+  .stat{font-size:30px;color:#cfe0ef;font-weight:500;} .stat b{color:#fff;font-weight:800;font-variant-numeric:tabular-nums;}
+  .marker{position:absolute;top:96px;right:120px;display:flex;align-items:center;gap:12px;font-size:22px;color:#f05252;font-weight:600;letter-spacing:.12em;}
+  .dot{width:14px;height:14px;border-radius:50%;background:#f05252;box-shadow:0 0 16px #f05252;}
+  .datacol{position:absolute;font-family:ui-monospace,monospace;font-size:26px;color:#3aa6e6;opacity:.16;white-space:pre;line-height:1.7;}
+  .cards{display:flex;gap:26px;margin-top:36px;}
+  .card{flex:1;background:rgba(10,26,42,.74);border:1px solid #2c4a66;border-left:4px solid #f05252;border-radius:14px;padding:24px 26px;}
+  .card .case{font-size:32px;font-weight:800;color:#fff;}
+  .card .scale{font-size:46px;font-weight:900;color:#f05252;font-variant-numeric:tabular-nums;margin:4px 0;}
+  .card .src{font-size:19px;color:#9db6cc;}
+  /* gap beat */
+  .gap{display:flex;align-items:center;justify-content:center;gap:90px;flex:1;}
+  .gapcol{text-align:center;} .gapnum{font-size:230px;font-weight:900;line-height:.85;font-variant-numeric:tabular-nums;}
+  .gapunit{font-size:54px;font-weight:800;letter-spacing:.04em;margin-top:6px;}
+  .gaplabel{font-size:24px;color:#9db6cc;margin-top:18px;max-width:420px;line-height:1.35;}
+  .gapvs{font-size:60px;font-weight:900;color:#3aa6e6;opacity:.8;}
+  /* feature rows (collection/intelligence/action) */
+  .featrow{display:flex;gap:22px;margin-top:30px;}
+  .feat{flex:1;background:rgba(10,26,42,.72);border:1px solid #2c4a66;border-top:3px solid #3aa6e6;border-radius:14px;padding:24px;}
+  .feat .ft{font-size:30px;font-weight:800;color:#fff;} .feat .fs{font-size:19px;color:#9db6cc;margin-top:6px;line-height:1.35;}
+  .feat .fmeta{font-size:16px;color:#3aa6e6;font-family:ui-monospace,monospace;margin-top:10px;}
+  .ring{width:150px;height:150px;border-radius:50%;border:6px solid #3aa6e6;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(58,166,230,.08);}
+  .ring .rn{font-size:50px;font-weight:900;color:#fff;font-variant-numeric:tabular-nums;line-height:1;} .ring .rl{font-size:16px;color:#9db6cc;}
+  .mono-chip{display:inline-block;font-family:ui-monospace,monospace;font-size:24px;color:#3aa6e6;background:#06121e;border:1px solid #2c4a66;border-radius:10px;padding:12px 20px;}
+  /* proof */
+  .statrow{display:flex;gap:22px;}
+  .scard{flex:1;background:rgba(10,26,42,.7);border:1px solid #2c4a66;border-radius:14px;padding:22px;text-align:center;}
+  .scard .sn{font-size:54px;font-weight:900;color:#3aa6e6;font-variant-numeric:tabular-nums;line-height:1;}
+  .scard .sl{font-size:19px;color:#cfe0ef;margin-top:8px;}
+  .deviceframe{position:absolute;top:120px;left:120px;width:1040px;border-radius:16px;overflow:hidden;border:1px solid #2c4a66;box-shadow:0 40px 120px rgba(0,0,0,.6);}
+  .deviceframe img{display:block;width:100%;}
+  /* hero / end */
+  .hero,.endwrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+  .glow{position:absolute;width:1100px;height:1100px;border-radius:50%;background:radial-gradient(circle,rgba(58,166,230,.42) 0%,rgba(58,166,230,0) 62%);}
+  .finlogo{width:180px;height:180px;}
+  .wordmark{font-size:184px;font-weight:900;letter-spacing:-.03em;color:#fff;line-height:1;}
+  .acr{font-size:28px;letter-spacing:.16em;color:#9db6cc;text-transform:uppercase;margin-top:18px;font-weight:600;}
+  .tagline{font-size:46px;font-weight:700;color:#3aa6e6;max-width:1250px;line-height:1.15;margin-top:14px;}
+  .url{font-size:34px;color:#fff;font-weight:600;margin-top:24px;}
+  .credit{font-size:24px;color:#9db6cc;letter-spacing:.1em;margin-top:8px;}
+  .vbig{font-size:104px;font-weight:900;line-height:1.0;letter-spacing:-.02em;color:#fff;text-align:center;max-width:1400px;}
+  /* overlays */
+  #dip{position:absolute;inset:0;background:#000;opacity:0;z-index:50;}
+  #glitch{position:absolute;inset:0;z-index:49;opacity:0;pointer-events:none;background:linear-gradient(rgba(58,166,230,.1) 1px, transparent 2px);background-size:100% 4px;mix-blend-mode:screen;}
+  #grain{position:absolute;inset:0;z-index:48;opacity:.05;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.5) .5px, transparent .6px);background-size:4px 4px;}
+  .label-sm{font-size:20px;color:#9db6cc;margin-top:16px;}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-width="1920" data-height="1080" data-start="0" data-duration="90">
+
+  <!-- B1 COLD OPEN -->
+  <div id="s1" class="scene">
+    <div class="imgwrap"><img id="img1" class="bgimg" src="assets/ocean-leak.png" crossorigin="anonymous" /></div>
+    <div class="scrim dark-scrim"></div>
+    <div id="s1c1" class="datacol" style="left:9%;top:-6%;">4052 ····<br>···· 0000<br>3201······<br>NIK:32··<br>cvv:···<br>pass:···<br>0098····890</div>
+    <div id="s1c2" class="datacol" style="left:79%;top:-12%;">npwp 0·.···<br>combolist<br>fullz id<br>4265····0002<br>···· leak<br>BCA dump<br>3573······</div>
+    <div class="vignette"></div>
+    <div class="content">
+      <div id="s1k" class="kicker">Sektor Keuangan Indonesia</div>
+      <div style="margin-top:auto;">
+        <div id="s1h1" class="h1">Setiap hari,</div>
+        <div id="s1h2" class="h1" style="font-size:104px;">data Anda <span class="red">bocor</span>.</div>
+        <div id="s1s" class="stat" style="margin-top:32px;">Diperjualbelikan di Telegram, paste site, dan forum gelap.</div>
+      </div>
+    </div>
+    <div id="s1m" class="marker"><span class="dot"></span> LIVE OSINT</div>
+  </div>
+
+  <!-- B2 PROBLEM / CASES -->
+  <div id="s2" class="scene">
+    <div class="imgwrap"><img id="img2" class="bgimg" src="assets/soc-indonesia.png" crossorigin="anonymous" /></div>
+    <div class="scrim red-scrim"></div><div class="vignette"></div>
+    <div class="content">
+      <div id="s2k" class="kicker red">Pola yang berulang</div>
+      <div id="s2h" class="h2" style="font-size:80px;margin-top:12px;">Lembaga jadi yang <span class="red">terakhir tahu</span>.</div>
+      <div class="cards">
+        <div id="s2c1" class="card"><div class="case">BRI Life</div><div class="scale">2 jt</div><div class="src">nasabah · 2021 · diungkap pihak luar</div></div>
+        <div id="s2c2" class="card"><div class="case">BPJS Kesehatan</div><div class="scale">279 jt</div><div class="src">data penduduk · 2021 · RaidForums</div></div>
+        <div id="s2c3" class="card"><div class="case">Data Dukcapil</div><div class="scale">337 jt</div><div class="src">kependudukan · 2023 · peneliti luar</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B3 THE GAP -->
+  <div id="s3" class="scene" style="background:radial-gradient(130% 120% at 50% 40%, #0e2236 0%, #060f1b 75%);">
+    <div class="vignette"></div>
+    <div class="content">
+      <div id="s3k" class="kicker red" style="text-align:center;">Jarak yang fatal</div>
+      <div class="gap">
+        <div class="gapcol"><div id="s3n1" class="gapnum red">168</div><div id="s3u1" class="gapunit red">HARI</div><div id="s3l1" class="gaplabel">Rata-rata waktu deteksi breach sektor keuangan (IBM, 2024)</div></div>
+        <div id="s3vs" class="gapvs">vs</div>
+        <div class="gapcol"><div id="s3n2" class="gapnum accent">24</div><div id="s3u2" class="gapunit accent">JAM</div><div id="s3l2" class="gaplabel">Kewajiban notifikasi awal insiden — SEOJK 29/2022 &amp; UU PDP</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B4 HERO REVEAL -->
+  <div id="s4" class="scene">
+    <div class="imgwrap"><img id="img4" class="bgimg" src="assets/shark-fin.png" crossorigin="anonymous" /></div>
+    <div class="scrim dark-scrim"></div>
+    <div class="hero">
+      <div id="s4glow" class="glow"></div>
+      <svg id="s4fin" class="finlogo" viewBox="0 0 36 36" fill="none"><path d="M18 4 L30 28 Q24 26 18 28 Q12 26 6 28 Z" fill="#3aa6e6"/></svg>
+      <div id="s4word" class="wordmark">SHARK-Fin</div>
+      <div id="s4acr" class="acr">Source Hunting Alert &amp; Risk Knowledge · Financial Intelligence</div>
+    </div>
+  </div>
+
+  <!-- B5 COLLECTION -->
+  <div id="s5" class="scene">
+    <div class="imgwrap"><img id="img5" class="bgimg" src="assets/collection-funnel.png" crossorigin="anonymous" /></div>
+    <div class="scrim dark-scrim"></div><div class="vignette"></div>
+    <div class="content">
+      <div id="s5k" class="kicker">01 · Collection</div>
+      <div id="s5h" class="h2" style="font-size:72px;margin-top:10px;">Memantau <span class="accent">4 sumber publik</span>. Tanpa henti.</div>
+      <div class="featrow">
+        <div id="s5f1" class="feat"><div class="ft">Telegram</div><div class="fs">Kanal publik</div><div class="fmeta">poll 5 mnt</div></div>
+        <div id="s5f2" class="feat"><div class="ft">Paste Site</div><div class="fs">Pastebin · Rentry</div><div class="fmeta">poll 15 mnt</div></div>
+        <div id="s5f3" class="feat"><div class="ft">GitHub</div><div class="fs">Repo publik</div><div class="fmeta">poll 30 mnt</div></div>
+        <div id="s5f4" class="feat"><div class="ft">Google Dork</div><div class="fs">Custom Search</div><div class="fmeta">poll 1 jam</div></div>
+      </div>
+      <div id="s5n" class="label-sm">Hanya sumber publik &amp; legal — bukan akses ilegal.</div>
+    </div>
+  </div>
+
+  <!-- B6 INTELLIGENCE -->
+  <div id="s6" class="scene">
+    <div class="imgwrap"><img id="img6" class="bgimg" src="assets/scanner-grid.png" crossorigin="anonymous" /></div>
+    <div class="scrim dark-scrim"></div><div class="vignette"></div>
+    <div class="content">
+      <div id="s6k" class="kicker">02 · Intelligence</div>
+      <div id="s6h" class="h2" style="font-size:68px;margin-top:10px;">Mengenali data finansial Indonesia — <span class="accent">presisi</span>.</div>
+      <div class="featrow">
+        <div id="s6f1" class="feat"><div class="ft">Kartu Kredit</div><div class="fs">Luhn + 10 tabel BIN bank</div><div class="fmeta">deterministik</div></div>
+        <div id="s6f2" class="feat"><div class="ft">NIK</div><div class="fs">validasi tanggal + provinsi</div><div class="fmeta">deterministik</div></div>
+        <div id="s6f3" class="feat"><div class="ft">NPWP</div><div class="fs">checksum mod-10 berbobot</div><div class="fmeta">deterministik</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:28px;margin-top:28px;">
+        <div id="s6ring" class="ring"><div class="rn">0–100</div><div class="rl">risk score</div></div>
+        <div id="s6chip" class="mono-chip">4052 90·· ···· 0000 &nbsp;→&nbsp; BIN: BRI &nbsp;·&nbsp; tersamar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B7 ACTION -->
+  <div id="s7" class="scene">
+    <div class="imgwrap"><img id="img7" class="bgimg" src="assets/alert-network.png" crossorigin="anonymous" /></div>
+    <div class="scrim dark-scrim"></div><div class="vignette"></div>
+    <div class="content">
+      <div id="s7k" class="kicker">03 · Action</div>
+      <div id="s7h" class="h2" style="font-size:72px;margin-top:10px;">Deteksi <span class="accent">→</span> kepatuhan, otomatis.</div>
+      <div class="featrow">
+        <div id="s7f1" class="feat"><div class="ft">Webhook → SOC</div><div class="fs">alert real-time terfilter severity</div><div class="fmeta">X-SHARK-Fin-Key</div></div>
+        <div id="s7f2" class="feat"><div class="ft">Draft SEOJK</div><div class="fs">notifikasi 29/2022 Bab IX siap-tinjau</div><div class="fmeta">&lt; 24 jam</div></div>
+        <div id="s7f3" class="feat"><div class="ft">Audit-log</div><div class="fs">setiap aksi tertelusur</div><div class="fmeta">fingerprint SHA-256</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B8 PROOF -->
+  <div id="s8" class="scene" style="background:radial-gradient(130% 110% at 72% 26%, #0e2a44 0%, #061320 74%);">
+    <div class="vignette"></div>
+    <div id="s8dev" class="deviceframe"><img src="assets/dashboard.png" crossorigin="anonymous" /></div>
+    <div style="position:absolute;top:150px;right:110px;width:560px;display:flex;flex-direction:column;gap:24px;">
+      <div id="s8k" class="kicker">Bukti, bukan klaim</div>
+      <div id="s8h" class="h2" style="font-size:58px;">Prototype yang <span class="accent">berjalan</span>.</div>
+      <div class="statrow"><div id="s8a" class="scard"><div class="sn">102</div><div class="sl">tes otomatis lulus</div></div>
+        <div id="s8b" class="scard"><div class="sn">4</div><div class="sl">sumber OSINT aktif</div></div></div>
+      <div class="statrow"><div id="s8c" class="scard"><div class="sn">8</div><div class="sl">tipe entitas finansial</div></div>
+        <div id="s8d" class="scard"><div class="sn">UU&nbsp;PDP</div><div class="sl">masking · hash-only</div></div></div>
+    </div>
+  </div>
+
+  <!-- B9 VISION -->
+  <div id="s9" class="scene">
+    <div class="imgwrap"><img id="img9" class="bgimg" src="assets/shield-archipelago.png" crossorigin="anonymous" /></div>
+    <div class="scrim dark-scrim"></div><div class="vignette"></div>
+    <div class="hero">
+      <div id="s9k" class="kicker" style="margin-bottom:24px;">Dampak</div>
+      <div id="s9h" class="vbig">Dari <span class="red">ratusan hari</span><br>menuju <span class="accent">mendekati real-time</span>.</div>
+      <div id="s9s" class="label-sm" style="font-size:26px;margin-top:30px;">Memperpendek jendela deteksi kebocoran data keuangan Indonesia.</div>
+    </div>
+  </div>
+
+  <!-- B10 END CARD -->
+  <div id="s10" class="scene" style="background:radial-gradient(circle at 50% 42%, #0c2236 0%, #05101c 70%);">
+    <div class="endwrap">
+      <div id="s10glow" class="glow" style="width:1300px;height:1300px;"></div>
+      <svg id="s10fin" class="finlogo" viewBox="0 0 36 36" fill="none" style="width:128px;height:128px;"><path d="M18 4 L30 28 Q24 26 18 28 Q12 26 6 28 Z" fill="#3aa6e6"/></svg>
+      <div id="s10word" class="wordmark" style="font-size:140px;">SHARK-Fin</div>
+      <div id="s10tag" class="tagline">Melindungi ekosistem keuangan digital Indonesia.</div>
+      <div id="s10url" class="url">shark-fin-zeta.vercel.app</div>
+      <div id="s10cr" class="credit">Digdaya x Hackathon 2026 · PIDI · Tim 418</div>
+    </div>
+  </div>
+
+  <!-- overlays -->
+  <div id="glitch"></div><div id="grain"></div><div id="dip"></div>
+
+  <!-- single pre-mixed master audio (stable music + loud VO + SFX) -->
+  <audio id="a-master" data-start="0" data-duration="90" data-track-index="5" src="assets/master.m4a" data-volume="1"></audio>
+</div>
+
+<script>
+window.__timelines = window.__timelines || {};
+var tl = gsap.timeline({ paused: true });
+function xfade(outSel, inSel, t, d){
+  tl.to(outSel, {opacity:0, filter:"blur(16px)", duration:d, ease:"power2.inOut"}, t);
+  tl.fromTo(inSel, {opacity:0, filter:"blur(16px)"}, {opacity:1, filter:"blur(0px)", duration:d, ease:"power2.inOut"}, t);
+}
+
+/* B1 COLD OPEN (0–9.5) */
+tl.fromTo("#img1", {scale:1.0}, {scale:1.12, duration:9.5, ease:"none"}, 0);
+tl.fromTo("#s1c1", {y:-60, opacity:0}, {y:160, opacity:.16, duration:9.5, ease:"none"}, 0);
+tl.fromTo("#s1c2", {y:-40, opacity:0}, {y:200, opacity:.16, duration:9.5, ease:"none"}, 0);
+tl.fromTo("#s1k", {opacity:0, y:-24}, {opacity:1, y:0, duration:.8, ease:"power2.out"}, 0.3);
+tl.fromTo("#s1m", {opacity:0}, {opacity:1, duration:.5}, 0.6);
+tl.fromTo("#s1h1", {opacity:0, y:50}, {opacity:1, y:0, duration:.7, ease:"power3.out"}, 1.3);
+tl.fromTo("#s1h2", {opacity:0, y:50}, {opacity:1, y:0, duration:.7, ease:"power3.out"}, 1.9);
+tl.fromTo("#s1s", {opacity:0, x:-40}, {opacity:1, x:0, duration:.8, ease:"expo.out"}, 2.8);
+tl.to("#s1m .dot", {opacity:.25, yoyo:true, repeat:7, duration:.5, ease:"sine.inOut"}, 1.2);
+xfade("#s1", "#s2", 9.0, 0.6);
+
+/* B2 PROBLEM (9.0–18.5) */
+tl.fromTo("#img2", {scale:1.08, x:0}, {scale:1.14, x:-40, duration:9.5, ease:"none"}, 9.0);
+tl.fromTo("#s2k", {opacity:0, x:-30}, {opacity:1, x:0, duration:.5, ease:"power2.out"}, 9.3);
+tl.fromTo("#s2h", {opacity:0, y:40}, {opacity:1, y:0, duration:.6, ease:"power3.out"}, 9.6);
+tl.fromTo("#s2c1", {opacity:0, y:60, rotation:-2}, {opacity:1, y:0, rotation:0, duration:.55, ease:"back.out(1.4)"}, 10.6);
+tl.fromTo("#s2c2", {opacity:0, y:60, rotation:1}, {opacity:1, y:0, rotation:0, duration:.55, ease:"back.out(1.4)"}, 10.85);
+tl.fromTo("#s2c3", {opacity:0, y:60, rotation:-1}, {opacity:1, y:0, rotation:0, duration:.55, ease:"back.out(1.4)"}, 11.1);
+tl.fromTo("#glitch", {opacity:0}, {opacity:.5, duration:.08, ease:"none", yoyo:true, repeat:6}, 17.4);
+tl.set("#glitch", {opacity:0}, 18.0);
+xfade("#s2", "#s3", 18.0, 0.6);
+
+/* B3 THE GAP (18–29.5) */
+tl.fromTo("#s3k", {opacity:0, y:-20}, {opacity:1, y:0, duration:.6, ease:"power2.out"}, 18.4);
+tl.fromTo("#s3n1", {opacity:0, scale:1.5}, {opacity:1, scale:1, duration:.5, ease:"power4.out"}, 18.9);
+tl.fromTo("#s3u1", {opacity:0, y:20}, {opacity:1, y:0, duration:.4, ease:"power2.out"}, 19.2);
+tl.fromTo("#s3l1", {opacity:0}, {opacity:1, duration:.6}, 19.6);
+tl.fromTo("#s3vs", {opacity:0, scale:.5}, {opacity:.8, scale:1, duration:.4, ease:"back.out(2)"}, 20.2);
+tl.fromTo("#s3n2", {opacity:0, scale:1.5}, {opacity:1, scale:1, duration:.5, ease:"power4.out"}, 20.6);
+tl.fromTo("#s3u2", {opacity:0, y:20}, {opacity:1, y:0, duration:.4, ease:"power2.out"}, 20.9);
+tl.fromTo("#s3l2", {opacity:0}, {opacity:1, duration:.6}, 21.3);
+tl.to("#s3n1", {opacity:.55, yoyo:true, repeat:3, duration:.7, ease:"sine.inOut"}, 22.0);
+/* T3 dip → hero */
+tl.to("#dip", {opacity:1, duration:.34, ease:"power2.in"}, 28.6);
+tl.set("#s3", {opacity:0}, 28.95);
+tl.set("#s4", {opacity:1}, 28.95);
+tl.to("#dip", {opacity:0, duration:.55, ease:"power2.out"}, 28.98);
+
+/* B4 HERO (28.95–37.5) */
+tl.fromTo("#img4", {scale:1.06}, {scale:1.16, duration:8.5, ease:"none"}, 28.95);
+tl.fromTo("#s4glow", {scale:.6, opacity:0}, {scale:1, opacity:1, duration:.9, ease:"power2.out"}, 29.0);
+tl.fromTo("#s4fin", {scale:.4, opacity:0, y:30}, {scale:1, opacity:1, y:0, duration:.7, ease:"back.out(1.7)"}, 29.1);
+tl.fromTo("#s4word", {scale:1.4, opacity:0}, {scale:1, opacity:1, duration:.55, ease:"power4.out"}, 29.25);
+tl.fromTo("#s4acr", {opacity:0, letterSpacing:"0.5em"}, {opacity:1, letterSpacing:"0.16em", duration:.8, ease:"power2.out"}, 30.0);
+tl.to("#s4glow", {scale:1.12, opacity:.7, yoyo:true, repeat:3, duration:1.1, ease:"sine.inOut"}, 30.2);
+xfade("#s4", "#s5", 37.0, 0.6);
+
+/* B5 COLLECTION (37–46.5) */
+tl.fromTo("#img5", {scale:1.0}, {scale:1.08, duration:9.5, ease:"none"}, 37.0);
+tl.fromTo("#s5k", {opacity:0, x:-30}, {opacity:1, x:0, duration:.5, ease:"power2.out"}, 37.3);
+tl.fromTo("#s5h", {opacity:0, y:40}, {opacity:1, y:0, duration:.6, ease:"expo.out"}, 37.6);
+tl.fromTo("#s5f1", {opacity:0, y:50}, {opacity:1, y:0, duration:.45, ease:"power3.out"}, 38.4);
+tl.fromTo("#s5f2", {opacity:0, y:50}, {opacity:1, y:0, duration:.45, ease:"power3.out"}, 38.6);
+tl.fromTo("#s5f3", {opacity:0, y:50}, {opacity:1, y:0, duration:.45, ease:"power3.out"}, 38.8);
+tl.fromTo("#s5f4", {opacity:0, y:50}, {opacity:1, y:0, duration:.45, ease:"power3.out"}, 39.0);
+tl.fromTo("#s5n", {opacity:0}, {opacity:1, duration:.6}, 39.6);
+xfade("#s5", "#s6", 46.0, 0.6);
+
+/* B6 INTELLIGENCE (46–56.5) */
+tl.fromTo("#img6", {scale:1.0}, {scale:1.08, duration:10.5, ease:"none"}, 46.0);
+tl.fromTo("#s6k", {opacity:0, x:-30}, {opacity:1, x:0, duration:.5, ease:"power2.out"}, 46.3);
+tl.fromTo("#s6h", {opacity:0, y:40}, {opacity:1, y:0, duration:.6, ease:"expo.out"}, 46.6);
+tl.fromTo("#s6f1", {opacity:0, x:-50}, {opacity:1, x:0, duration:.45, ease:"power3.out"}, 47.4);
+tl.fromTo("#s6f2", {opacity:0, x:-50}, {opacity:1, x:0, duration:.45, ease:"power3.out"}, 47.6);
+tl.fromTo("#s6f3", {opacity:0, x:-50}, {opacity:1, x:0, duration:.45, ease:"power3.out"}, 47.8);
+tl.fromTo("#s6ring", {opacity:0, scale:.6}, {opacity:1, scale:1, duration:.6, ease:"back.out(1.6)"}, 48.6);
+tl.fromTo("#s6chip", {opacity:0, x:40}, {opacity:1, x:0, duration:.5, ease:"power2.out"}, 49.0);
+tl.to("#s6ring", {borderColor:"#7fd0ff", yoyo:true, repeat:3, duration:.8, ease:"sine.inOut"}, 49.6);
+xfade("#s6", "#s7", 56.0, 0.6);
+
+/* B7 ACTION (56–65.5) */
+tl.fromTo("#img7", {scale:1.06}, {scale:1.13, duration:9.5, ease:"none"}, 56.0);
+tl.fromTo("#s7k", {opacity:0, x:-30}, {opacity:1, x:0, duration:.5, ease:"power2.out"}, 56.3);
+tl.fromTo("#s7h", {opacity:0, y:40}, {opacity:1, y:0, duration:.6, ease:"expo.out"}, 56.6);
+tl.fromTo("#s7f1", {opacity:0, y:50}, {opacity:1, y:0, duration:.45, ease:"power3.out"}, 57.4);
+tl.fromTo("#s7f2", {opacity:0, y:50}, {opacity:1, y:0, duration:.45, ease:"back.out(1.3)"}, 57.65);
+tl.fromTo("#s7f3", {opacity:0, y:50}, {opacity:1, y:0, duration:.45, ease:"power3.out"}, 57.9);
+xfade("#s7", "#s8", 65.0, 0.6);
+
+/* B8 PROOF (65–75.5) */
+tl.fromTo("#s8dev", {opacity:0, x:-80, rotationY:14, transformPerspective:1400}, {opacity:1, x:0, rotationY:6, duration:.9, ease:"power3.out"}, 65.0);
+tl.fromTo("#s8k", {opacity:0, x:40}, {opacity:1, x:0, duration:.5, ease:"power2.out"}, 65.5);
+tl.fromTo("#s8h", {opacity:0, y:40}, {opacity:1, y:0, duration:.6, ease:"expo.out"}, 65.8);
+tl.fromTo("#s8a", {opacity:0, scale:.8}, {opacity:1, scale:1, duration:.45, ease:"back.out(1.6)"}, 66.6);
+tl.fromTo("#s8b", {opacity:0, scale:.8}, {opacity:1, scale:1, duration:.45, ease:"back.out(1.6)"}, 66.8);
+tl.fromTo("#s8c", {opacity:0, scale:.8}, {opacity:1, scale:1, duration:.45, ease:"back.out(1.6)"}, 67.0);
+tl.fromTo("#s8d", {opacity:0, scale:.8}, {opacity:1, scale:1, duration:.45, ease:"back.out(1.6)"}, 67.2);
+xfade("#s8", "#s9", 75.0, 0.6);
+
+/* B9 VISION (75–83.5) */
+tl.fromTo("#img9", {scale:1.12}, {scale:1.02, duration:8.5, ease:"none"}, 75.0);
+tl.fromTo("#s9k", {opacity:0, y:-20}, {opacity:1, y:0, duration:.5, ease:"power2.out"}, 75.4);
+tl.fromTo("#s9h", {opacity:0, y:40}, {opacity:1, y:0, duration:.8, ease:"power3.out"}, 75.8);
+tl.fromTo("#s9s", {opacity:0}, {opacity:1, duration:.7}, 76.8);
+xfade("#s9", "#s10", 83.0, 0.6);
+
+/* B10 END CARD (83–90) */
+tl.fromTo("#s10glow", {scale:.6, opacity:0}, {scale:1, opacity:1, duration:1.0, ease:"power2.out"}, 83.1);
+tl.fromTo("#s10fin", {opacity:0, scale:.5}, {opacity:1, scale:1, duration:.7, ease:"back.out(1.6)"}, 83.3);
+tl.fromTo("#s10word", {opacity:0, y:40}, {opacity:1, y:0, duration:.7, ease:"power3.out"}, 83.6);
+tl.fromTo("#s10tag", {opacity:0, y:30}, {opacity:1, y:0, duration:.7, ease:"power2.out"}, 84.2);
+tl.fromTo("#s10url", {opacity:0}, {opacity:1, duration:.6}, 84.9);
+tl.fromTo("#s10cr", {opacity:0}, {opacity:1, duration:.6}, 85.3);
+tl.to("#s10glow", {scale:1.1, opacity:.7, yoyo:true, repeat:2, duration:1.2, ease:"sine.inOut"}, 85.6);
+tl.to("#dip", {opacity:1, duration:1.2, ease:"power2.in"}, 88.6);
+
+window.__timelines["main"] = tl;
+</script>
+</body>
+</html>

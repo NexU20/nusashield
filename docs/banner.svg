@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="340" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#050e1a"/>
+      <stop offset="100%" stop-color="#0a1929"/>
+    </linearGradient>
+    <linearGradient id="fin-fill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a3d5c"/>
+      <stop offset="100%" stop-color="#0e6fa3"/>
+    </linearGradient>
+    <linearGradient id="title-grad" x1="250" y1="0" x2="950" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#e8f4ff"/>
+      <stop offset="80%" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0"/>
+      <stop offset="20%" stop-color="#22d3ee" stop-opacity="0.2"/>
+      <stop offset="80%" stop-color="#22d3ee" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="340" rx="16" fill="url(#bg)"/>
+
+  <!-- Subtle grid -->
+  <g opacity="0.03" stroke="#64b4ff" stroke-width="0.5">
+    <line x1="0" y1="85" x2="1200" y2="85"/>
+    <line x1="0" y1="170" x2="1200" y2="170"/>
+    <line x1="0" y1="255" x2="1200" y2="255"/>
+  </g>
+
+  <!-- Decorative dots -->
+  <circle cx="70" cy="40" r="1.5" fill="#22d3ee" opacity="0.3"/>
+  <circle cx="180" cy="300" r="1" fill="#22d3ee" opacity="0.2"/>
+  <circle cx="1020" cy="35" r="2" fill="#22d3ee" opacity="0.25"/>
+  <circle cx="1140" cy="280" r="1.5" fill="#22d3ee" opacity="0.3"/>
+  <circle cx="950" cy="310" r="1" fill="#22d3ee" opacity="0.15"/>
+  <circle cx="300" cy="30" r="1" fill="#22d3ee" opacity="0.15"/>
+
+  <!-- Shark Fin + Title row (side by side, centered as group) -->
+  <!-- Fin -->
+  <g transform="translate(270, 38)">
+    <path d="M 15,120 Q 62,116 115,0 L 120,120 Q 62,115 15,120 Z" fill="#000" opacity="0.15" transform="translate(2,2)"/>
+    <path d="M 13,120 Q 62,116 115,0 L 120,120 Q 62,115 13,120 Z" stroke="#0e6fa3" stroke-width="2" fill="url(#fin-fill)"/>
+    <path d="M 38,120 Q 70,112 110,16 L 115,120 Q 70,115 38,120 Z" fill="#22d3ee" opacity="0.12"/>
+  </g>
+
+  <!-- Water line -->
+  <line x1="100" y1="138" x2="1100" y2="138" stroke="url(#water)" stroke-width="1"/>
+
+  <!-- Title -->
+  <text x="600" y="120" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="110" font-weight="800" letter-spacing="-3" fill="url(#title-grad)" text-anchor="middle">SHARK-Fin</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="170" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" font-weight="500" letter-spacing="6" fill="#7ab8d9" text-anchor="middle">SOURCE HUNTING ALERT AND RISK KNOWLEDGE</text>
+
+  <!-- Tagline -->
+  <text x="600" y="210" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="26" font-weight="500" fill="#22d3ee" text-anchor="middle">Intelijen Ancaman Siber Keuangan Indonesia</text>
+
+  <!-- Pills row -->
+  <g transform="translate(175, 245)">
+    <rect x="0" y="0" width="155" height="34" rx="17" fill="#22d3ee" fill-opacity="0.08" stroke="#22d3ee" stroke-opacity="0.2" stroke-width="1"/>
+    <text x="77" y="22" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#22d3ee" text-anchor="middle">4 Sumber OSINT</text>
+
+    <rect x="170" y="0" width="145" height="34" rx="17" fill="#22d3ee" fill-opacity="0.08" stroke="#22d3ee" stroke-opacity="0.2" stroke-width="1"/>
+    <text x="242" y="22" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#22d3ee" text-anchor="middle">8 Tipe Entitas</text>
+
+    <rect x="330" y="0" width="110" height="34" rx="17" fill="#22d3ee" fill-opacity="0.08" stroke="#22d3ee" stroke-opacity="0.2" stroke-width="1"/>
+    <text x="385" y="22" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#22d3ee" text-anchor="middle">&lt; 1 Jam</text>
+
+    <rect x="455" y="0" width="115" height="34" rx="17" fill="#22d3ee" fill-opacity="0.08" stroke="#22d3ee" stroke-opacity="0.2" stroke-width="1"/>
+    <text x="512" y="22" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#22d3ee" text-anchor="middle">93 Tests</text>
+
+    <rect x="585" y="0" width="155" height="34" rx="17" fill="#22d3ee" fill-opacity="0.08" stroke="#22d3ee" stroke-opacity="0.2" stroke-width="1"/>
+    <text x="662" y="22" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#22d3ee" text-anchor="middle">SEOJK 29/2022</text>
+  </g>
+
+  <!-- PIDI badge -->
+  <text x="600" y="318" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#4a7d9a" text-anchor="middle">PIDI DIGDAYA × Hackathon 2026 · PS1: Cyber Security &amp; Data Protection</text>
+</svg>

@@ -1,0 +1,10 @@
+# Only the frontend is built/deployed on Vercel (see vercel.json).
+backend
+docs
+scripts
+.github
+*.pdf
+*.pdf:Zone.Identifier
+docker-compose.yml
+FIXES.md
+CLAUDE.md

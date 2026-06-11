@@ -1,0 +1,38 @@
+# Environment
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Node
+node_modules/
+dist/
+
+# Docker
+pgdata/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+.vercel
+
+# Deck render QA artifacts
+.deckshots/
+
+# Trailer render outputs & QA frames (large/regenerable; source + assets are kept)
+media/trailer/renders/
+media/trailer/.qa/
+
+# Hackathon source-brief PDFs (input material) and Windows download sidecars
+/*.pdf
+*:Zone.Identifier
