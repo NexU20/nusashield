@@ -36,3 +36,6 @@ media/trailer/.qa/
 # Hackathon source-brief PDFs (input material) and Windows download sidecars
 /*.pdf
 *:Zone.Identifier
+
+# Documentation
+docs/
